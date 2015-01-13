@@ -1,0 +1,16 @@
+{
+  "name": "QuakeShakePub",
+  "version": "0.0.0",
+  "description": "re-implementation of the QuakeShake Pub piece with tweaks",
+  "main": "app.js",
+  "dependencies": {
+    "ws": "*",
+    "bl":"*",
+    "redis": "^0.10.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikg/QuakeShakePub.git"
+  },
+  "homepage": "https://github.com/nikg/QuakeShakePub"
+}
