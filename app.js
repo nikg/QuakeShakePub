@@ -7,7 +7,7 @@
 //ALL EPOCH TIMES ARE MILLISECONDS!!!!
 
 var Waveserver = require("./lib/waveserver.js");
-var PublishScnls = require("./config/hawks3ZPub.conf.js"); //config file
+var PublishScnls = require("./config.js"); //config file
   
 var redis = require('redis');
 
@@ -43,17 +43,19 @@ console.log("WebSocket started on port:" + clientport);
 var allSocks = {};  // associative array to store connections ; tried [] array but 'splice' doesn't seem to work.
 connectionIDCounter = 0;
 
-var wsSrc;
+// Start the websocket
 var wsDst = new WebSocketServer({server: server});
 
-wsDst.broadcast = function(data) {  // broadcast data to all connnections
+// broadcast data to all connections
+wsDst.broadcast = function(data) {  // broadcast data to all LIVE connnections
   for(var key in allSocks) {
     if(allSocks[key].readyState == 1) {
-      allSocks[key].send(new Buffer(data, "base64"));
+      allSocks[key].send(data);
     }
   }
 };
 
+// manage WebSocket client connections
 wsDst.on('connection', function(ws) {  // on connecting 
 
   ws.id = connectionIDCounter;  // set ID to counter
@@ -77,30 +79,6 @@ wsDst.on('connection', function(ws) {  // on connecting
 
 });
 
-function wsStart(){  // put the source websocket logic in a function for easy reconnect
-
-  wsSrc = new WebSocket(config.sourceSocket);
-  wsSrc.on('open', function() {
-    printSourceStatus('Connected');
-  });
-
-  wsSrc.on('message', function(data, flags) {
-    var message = new Buffer(data).toString('base64');
-    
-  });
-
-  wsSrc.on('close', function(ws) {
-    printSourceStatus('Disconnected');
-    // try to reconnect
-    setTimeout(wsStart(), 5000);
-  });
-
-  wsSrc.on('error', function(error) { 
-    console.log(error); 
-    setTimeout(wsStart(), 5000); 
-  });
-}
-
 function getData(chan){
   //create connection then attach listeners 
   // header: fires when getscnlraw header is processed
@@ -116,7 +94,7 @@ function getData(chan){
     responseHeader = header;
     if (header.flag ==="FR" && daemon){ //most common error missed by current data not in ws yet
       ws.disconnect();
-      console.log("Wave ERROR: FR & daemon");
+      console.log("Wave ERROR: FR & daemon (Current data not in Wave yet)");
     }else if(header.flag === 'FB'){
       console.log("Wave ERROR: there has been a terrible error of some sort or other.");
       ws.disconnect();
@@ -128,20 +106,16 @@ function getData(chan){
     //console.log("Wave data: " + message);
     if(message.starttime > chan.start){
       chan.start = message.starttime;
-      //pub.publish(redisKey, JSON.stringify(message));
-      sendData(JSON.stringify(message));
-    }
-  
-  });
+      
+      wsDst.broadcast(JSON.stringify(message)); // WebSocket implementation
 
-  function sendData(data) {
-      console.log("Sending data:" + data);
       console.log("from scnl:" + message.sta + ":" + message.chan + ":" + message.net + ":" + message.loc);
       // console.log(chan.sta + " " + (lastEndtime - message.starttime));
       lastEndtime = message.endtime;
       console.log("packet length " + message.data.length);
       console.log("elapsed time = " + (message.endtime - message.starttime));
-  }
+    }
+  });
 
   ws.on('error', function(error){
     console.log("Wave Error (closed): " + error); //error
@@ -157,19 +131,20 @@ function getData(chan){
       getData(chan);
     }, 500);
   });
-
-}
+} // end getData()
 
 //the first call
 var end = Date.now();
 getData(scnls[0]);
 
+// ECONNREFUSED just in case - try to reconnect
 process.on('uncaughtException', function(err) {
   // try to reconnect
   if(err.code == 'ECONNREFUSED'){
-    setTimeout(wsStart(), 5000);
+    setTimeout(getData(scnls[0]), 5000);
   }
 });
+
 
 /* FUNCTIONS */
 
