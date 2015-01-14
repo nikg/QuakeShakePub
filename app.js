@@ -47,12 +47,18 @@ connectionIDCounter = 0;
 var wsDst = new WebSocketServer({server: server});
 
 // broadcast data to all connections
-wsDst.broadcast = function(data) {  // broadcast data to all LIVE connnections
+/*wsDst.broadcast = function(data) {  // broadcast data to all LIVE connnections
   for(var key in allSocks) {
     if(allSocks[key].readyState == 1) {
       allSocks[key].send(data);
     }
   }
+};*/
+
+wsDst.broadcast = function broadcast(data) {
+  wsDst.clients.forEach(function each(client) {
+    client.send(data);
+  });
 };
 
 // manage WebSocket client connections
