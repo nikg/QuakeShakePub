@@ -86,6 +86,7 @@ function getData(chan){
   //close fires on waverserver closes connection
 
   var ws = new Waveserver(waveHost, wavePort, chan, Date.now());
+  
   ws.connect();
 
   //parse getScnlRaw flag and decide whether to disconnect or continue
@@ -111,9 +112,9 @@ function getData(chan){
 
       console.log("from scnl:" + message.sta + ":" + message.chan + ":" + message.net + ":" + message.loc);
       // console.log(chan.sta + " " + (lastEndtime - message.starttime));
-      lastEndtime = message.endtime;
-      console.log("packet length " + message.data.length);
-      console.log("elapsed time = " + (message.endtime - message.starttime));
+      //lastEndtime = message.endtime;
+      //console.log("packet length " + message.data.length);
+      //console.log("elapsed time = " + (message.endtime - message.starttime));
     }
   });
 
