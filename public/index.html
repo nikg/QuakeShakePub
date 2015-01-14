@@ -16,9 +16,10 @@
         document.getElementById('sta').innerHTML = data.sta;
         document.getElementById('from').innerHTML = StrToTime(data.starttime);
         document.getElementById('to').innerHTML = StrToTime(data.endtime);
+        //document.getElementById('test').innerHTML = "port " + (location.port ? ':'+location.port : '');
       }
       var host = window.document.location.host.replace(/:.*/, '');
-      var ws = new WebSocket('ws://' + host + ':9999');
+      var ws = new WebSocket('ws://' + host + (location.port ? ':'+location.port : ''));
       ws.onmessage = function (event) {
         updateStats(JSON.parse(event.data));
       };
@@ -40,5 +41,6 @@
     sta: <div id='sta'></div><br>
     from: <div id='from'></div><br>
     to: <div id='to'></div><br>
+    <div id='test'></div>
   </body>
 </html>

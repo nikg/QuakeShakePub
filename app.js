@@ -108,7 +108,7 @@ function getData(chan){
     var chan = findChan(message);
     if(message.starttime > chan.start){
       chan.start = message.starttime;
-      //console.log("station=" + message.sta + " starttime=" + StrToTime(message.starttime) + " endtime=" + StrToTime(message.endtime));
+      console.log("sending station=" + message.sta + " starttime=" + StrToTime(message.starttime) + " endtime=" + StrToTime(message.endtime));
       wsDst.broadcast(JSON.stringify(message)); // WebSocket implementation
     }
   });
