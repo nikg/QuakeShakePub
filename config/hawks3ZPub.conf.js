@@ -9,8 +9,11 @@ function PublishScnls(){
   this.key = "hawks3Z";
   this.waveHost = "import02.ess.washington.edu";
   this.wavePort = 16022;
-  this.redisHost = "localhost";
-  this.redisPort = 6379;
+  //this.redisHost = "localhost";
+  //this.redisPort = 6379;
+  /* added for WebSocket out instead of Redis */
+  this.wsPort = 9999;
+
   //all channels you want to publish to this key
   this.scnls = [
                 new Scnl({sta: 'HWK1', chan: 'HNZ', net: 'UW', loc: '--'}),

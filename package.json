@@ -6,7 +6,7 @@
   "dependencies": {
     "ws": "*",
     "bl":"*",
-    "redis": "^0.10.3"
+    "express": "*"
   },
   "repository": {
     "type": "git",
