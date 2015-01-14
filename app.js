@@ -107,7 +107,9 @@ function getData(chan){
     var chan = findChan(message);
     if(message.starttime > chan.start){
       chan.start = message.starttime;
-      console.log("sending station=" + message.sta + " starttime=" + StrToTime(message.starttime) + " endtime=" + StrToTime(message.endtime));
+      console.log("from=" + message.sta + ":" + message.chan + ":" + message.net + ":" + message.loc + " length=" + message.data.length + " start=" + StrToTime(message.starttime) + " end=" + StrToTime(message.endtime));
+      //console.log("elapsed time = " + (message.endtime - message.starttime));
+
       wsDst.broadcast(JSON.stringify(message)); // WebSocket implementation
     }
   });
@@ -168,6 +170,17 @@ function printClientStatus(ws, status) {
 
 function printSourceStatus(status) {
   console.log(new Date() + ' ' + status + ' from: ' + config.sourceSocket);
+}
+
+function StrToTime(unix_timestamp) {
+  var date = new Date(unix_timestamp);
+  var hours = date.getHours();// hours part from the timestamp
+  var minutes = "0" + date.getMinutes(); // minutes part from the timestamp
+  var seconds = "0" + date.getSeconds(); // seconds part from the timestamp
+  var ms = "0" + date.getMilliseconds(); // milliseconds part from the timestamp
+  // will display time in 10:30:23.354 format
+  var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2) + '.' + ms.substr(ms.length-3);
+  return formattedTime
 }
 
 // prototype to return size of associative array
