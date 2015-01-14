@@ -58,6 +58,7 @@ wsDst.broadcast = function(data) {  // broadcast data to all LIVE connnections
 // manage WebSocket client connections
 wsDst.on('connection', function(ws) {  // on connecting 
 
+  console.log("connected.....");
   ws.id = connectionIDCounter;  // set ID to counter
   ws.IP = ws._socket.remoteAddress + ':' + ws._socket.remotePort;
   allSocks[connectionIDCounter] = ws; // store socket in array object
@@ -79,9 +80,10 @@ wsDst.on('connection', function(ws) {  // on connecting
 
 });
 
+// main function
 function getData(chan){
   //create connection then attach listeners 
-  // header: fires when getscnlraw header is processed
+  //header: fires when getscnlraw header is processed
   //data: fires when data is buffered
   //close fires on waverserver closes connection
 
@@ -104,17 +106,10 @@ function getData(chan){
 
   ws.on('data', function(message){
     var chan = findChan(message);
-    //console.log("Wave data: " + message);
     if(message.starttime > chan.start){
       chan.start = message.starttime;
-      
+      //console.log("station=" + message.sta + " starttime=" + StrToTime(message.starttime) + " endtime=" + StrToTime(message.endtime));
       wsDst.broadcast(JSON.stringify(message)); // WebSocket implementation
-
-      console.log("from scnl:" + message.sta + ":" + message.chan + ":" + message.net + ":" + message.loc);
-      // console.log(chan.sta + " " + (lastEndtime - message.starttime));
-      //lastEndtime = message.endtime;
-      //console.log("packet length " + message.data.length);
-      //console.log("elapsed time = " + (message.endtime - message.starttime));
     }
   });
 
