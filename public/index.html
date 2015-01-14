@@ -11,18 +11,28 @@
         display: inline;
       }
     </style>
+      </head>
+  <body>
+  	<h3>QuakeShake Pub powered by Azure</h3>
+    <strong>Data:</strong><br>
+    sta: <div id='sta'></div><br>
+    from: <div id='from'></div><br>
+    to: <div id='to'></div><br>
+    <div id='test'></div>
+
     <script>
       function updateStats(data) {
         document.getElementById('sta').innerHTML = data.sta;
         document.getElementById('from').innerHTML = StrToTime(data.starttime);
         document.getElementById('to').innerHTML = StrToTime(data.endtime);
-        //document.getElementById('test').innerHTML = "port " + (location.port ? ':'+location.port : '');
       }
       var host = window.document.location.host.replace(/:.*/, '');
       var ws = new WebSocket('ws://' + host + (location.port ? ':'+location.port : ''));
       ws.onmessage = function (event) {
         updateStats(JSON.parse(event.data));
       };
+
+      document.getElementById('test').innerHTML = "port " + (location.port ? ':'+location.port : '');
 
 		function StrToTime(unix_timestamp) {
 		  var date = new Date(unix_timestamp);
@@ -34,13 +44,5 @@
 		  return formattedTime
 		} 
     </script>
-  </head>
-  <body>
-  	<h3>QuakeShake Pub powered by Azure</h3>
-    <strong>Data:</strong><br>
-    sta: <div id='sta'></div><br>
-    from: <div id='from'></div><br>
-    to: <div id='to'></div><br>
-    <div id='test'></div>
   </body>
 </html>

@@ -58,7 +58,6 @@ wsDst.broadcast = function(data) {  // broadcast data to all LIVE connnections
 // manage WebSocket client connections
 wsDst.on('connection', function(ws) {  // on connecting 
 
-  console.log("connected.....");
   ws.id = connectionIDCounter;  // set ID to counter
   ws.IP = ws._socket.remoteAddress + ':' + ws._socket.remotePort;
   allSocks[connectionIDCounter] = ws; // store socket in array object
