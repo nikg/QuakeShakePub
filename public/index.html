@@ -27,12 +27,14 @@
         document.getElementById('to').innerHTML = StrToTime(data.endtime);
       }
       var host = window.document.location.host.replace(/:.*/, '');
-      var ws = new WebSocket('ws://' + host + (location.port ? ':'+location.port : ''));
+      //var wsurl = 'ws://quakeshakepub.azurewebsites.net:80';
+      var wsurl = 'ws://' + host + (location.port ? ':'+location.port : '');
+      var ws = new WebSocket(wsurl);
       ws.onmessage = function (event) {
         updateStats(JSON.parse(event.data));
       };
 
-      document.getElementById('test').innerHTML = "port " + (location.port ? ':'+location.port : '');
+      document.getElementById('test').innerHTML = "wsurl=" + wsurl + " port=" + (location.port ? ':'+location.port : '');
 
 		function StrToTime(unix_timestamp) {
 		  var date = new Date(unix_timestamp);
