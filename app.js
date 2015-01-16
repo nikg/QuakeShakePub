@@ -9,13 +9,13 @@
 var Waveserver = require("./lib/waveserver.js");
 var PublishScnls = require("./config.js"); //config file
   
-var redis = require('redis');
+// var  = require('redis');
 
 var scnlIndex = 0;
 
 //get configs
 var conf = new PublishScnls();
-var redisKey=conf.key;
+// var redisKey=conf.key;
 var scnls = conf.scnls;
 var waveHost = conf.waveHost;
 var wavePort = conf.wavePort;
@@ -132,7 +132,7 @@ function getData(chan){
       scnlIndex = scnlIndex == scnls.length ? 0 : scnlIndex;
       var chan = scnls[scnlIndex];
       getData(chan);
-    }, 500);
+    }, 100);
   });
 } // end getData()
 

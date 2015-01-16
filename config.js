@@ -17,7 +17,7 @@ function PublishScnls(){
   //all channels you want to publish to this key
   this.scnls = [
                 new Scnl({sta: 'HWK1', chan: 'HNZ', net: 'UW', loc: '--'}),
-                new Scnl({sta: 'HWK2', chan: 'HNZ', net: 'UW', loc: '00'}),
+                new Scnl({sta: 'HWK2', chan: 'HNZ', net: 'UW', loc: '01'}),
                 new Scnl({sta: 'HWK3', chan: 'HNZ', net: 'UW', loc: '--'})
                 ];
              
